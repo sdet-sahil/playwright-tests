@@ -36,14 +36,14 @@ jobs:
     # 2. Manage browser binary cache
     - name: Get Playwright Version for Cache Key
       id: playwright-version
-      run: echo "version=$(npx playwright --version | awk '{print $2}')" >> $GITHUB_OUTPUT
+      run: echo "version=\$(npx playwright --version | awk '{print 2')" >> GITHUB_OUTPUT
 
     - name: Cache Playwright Browsers
       id: cache-playwright
       uses: actions/cache@v4
       with:
         path: ~/.cache/ms-playwright
-        key: ${{ runner.os }}-playwright-${{ steps.playwright-version.outputs.version }}
+        key:  runner.os -playwright-{{ steps.playwright-version.outputs.version }}
 
     # 3. Handle system dependencies & browser installs
     - name: Install Playwright OS Dependencies
@@ -53,13 +53,40 @@ jobs:
       if: steps.cache-playwright.outputs.cache-hit != 'true'
       run: npx playwright install
 
-    # 4. Run tests
+    # 4. Run tests (continue-on-error keeps pipeline alive to run the parsing metrics)
     - name: Run Playwright tests
+      id: run-tests
+      continue-on-error: true
       run: npx playwright test
       env: 
-        TEST_ENV: ${{ github.event.inputs.environment || 'prod' }}
+        TEST_ENV: \${{ github.event.inputs.environment || 'prod' }}
 
-    # 5. ALWAYS SAVE THE HTML REPORT TO GITHUB ARTIFACTS
+    # 5. Extract Metrics from Playwright JSON data
+    - name: Parse Test Metrics
+      if: always()
+      id: parse-metrics
+      run: |
+        JSON_PATH="playwright-report/results.json"
+        
+        if [ ! -f "\$JSON_PATH" ]; then
+          echo "TOTAL=0" >> \$GITHUB_OUTPUT
+          echo "PASSED=0" >> \$GITHUB_OUTPUT
+          echo "FAILED=0" >> \$GITHUB_OUTPUT
+          echo "FLAKY=0" >> \$GITHUB_OUTPUT
+          exit 0
+        fi
+        
+        TOTAL=(jq '.stats.expected + .stats.unexpected + .stats.flaky + .stats.skipped' JSON_PATH)
+        PASSED=(jq '.stats.expected' JSON_PATH)
+        FAILED=(jq '.stats.unexpected' JSON_PATH)
+        FLAKY=(jq '.stats.flaky' JSON_PATH)
+        
+        echo "TOTAL=TOTAL" >> GITHUB_OUTPUT
+        echo "PASSED=PASSED" >> GITHUB_OUTPUT
+        echo "FAILED=FAILED" >> GITHUB_OUTPUT
+        echo "FLAKY=FLAKY" >> GITHUB_OUTPUT
+
+    # 6. Save standard HTML reports to GitHub cloud storage
     - name: Upload Playwright HTML Report
       if: always()
       uses: actions/upload-artifact@v4
@@ -74,26 +101,47 @@ jobs:
 
     # 🟢 Slack Success Alert
     - name: Send Slack Notification on Success
-      if: success() && (github.actor == 'dependabot[bot]' || github.event_name == 'workflow_dispatch')
+      if: steps.run-tests.outcome == 'success' && (github.actor == 'dependabot[bot]' || github.event_name == 'workflow_dispatch')
       uses: rtCamp/action-slack-notify@v2
       env:
-        SLACK_WEBHOOK: ${{ secrets.PLAYWRIGHT_CHANNEL_URL }}
+        SLACK_WEBHOOK: \${{ secrets.PLAYWRIGHT_CHANNEL_URL }}
         SLACK_CHANNEL: 'testing-alerts'
         SLACK_COLOR: '#00FF00'
         SLACK_ICON: 'https://playwright.dev'
-        SLACK_TITLE: '✅ Playwright Test Successful!'
-        SLACK_MESSAGE: 'All automated end-to-end tests passed cleanly against the browser engines in [${{ github.event.inputs.environment || ''prod'' }}]!\nView Run: https://github.com{{ github.repository }}/actions/runs/${{ github.run_id }}'
+        SLACK_TITLE: '✅ Playwright Execution Passed!'
+        SLACK_MESSAGE: |
+          *Environment:* `${{ github.event.inputs.environment || 'prod' }}`
+          *Results Summary:*
+          📊 Total Tests: `${{ steps.parse-metrics.outputs.TOTAL }}`
+          ✅ Passed: `${{ steps.parse-metrics.outputs.PASSED }}`
+          ❌ Failed: `${{ steps.parse-metrics.outputs.FAILED }}`
+          ⚠️ Flaky: `${{ steps.parse-metrics.outputs.FLAKY }}`
+        SLACK_FOOTER: 'View Pipeline Summary: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
         SLACK_USERNAME: 'Playwright Bot'
 
     # 🔴 Slack Failure Alert
     - name: Send Slack Notification on Failure
-      if: failure() && (github.actor == 'dependabot[bot]' || github.event_name == 'workflow_dispatch')
+      if: steps.run-tests.outcome == 'failure' && (github.actor == 'dependabot[bot]' || github.event_name == 'workflow_dispatch')
       uses: rtCamp/action-slack-notify@v2
       env:
-        SLACK_WEBHOOK: ${{ secrets.PLAYWRIGHT_CHANNEL_URL }}
+        SLACK_WEBHOOK: \${{ secrets.PLAYWRIGHT_CHANNEL_URL }}
         SLACK_CHANNEL: 'testing-alerts'
         SLACK_COLOR: '#FF0000'
         SLACK_ICON: 'https://playwright.dev'
-        SLACK_TITLE: '🚨 Playwright Test Failed!'
-        SLACK_MESSAGE: 'The Playwright test suite broke in [${{ github.event.inputs.environment || ''prod'' }}]. Please check the logs and download the HTML Report artifact here:\n👉 https://github.com{{ github.repository }}/actions/runs/${{ github.run_id }}'
+        SLACK_TITLE: '🚨 Playwright Execution Broken!'
+        SLACK_MESSAGE: |
+          *Environment:* `${{ github.event.inputs.environment || 'prod' }}`
+          *Results Summary:*
+          📊 Total Tests: `${{ steps.parse-metrics.outputs.TOTAL }}`
+          ✅ Passed: `${{ steps.parse-metrics.outputs.PASSED }}`
+          ❌ Failed: `${{ steps.parse-metrics.outputs.FAILED }}`
+          ⚠️ Flaky: `${{ steps.parse-metrics.outputs.FLAKY }}`
+          
+          Please check the failure logs and download the HTML Report artifact immediately.
+        SLACK_FOOTER: 'Download Report Artifact Here: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
         SLACK_USERNAME: 'Playwright Bot'
+
+    # 7. Explicit clean-up: Fail the GitHub step if the test runner step failed
+    - name: Enforce Pipeline Exit Code
+      if: steps.run-tests.outcome == 'failure'
+      run: exit 1

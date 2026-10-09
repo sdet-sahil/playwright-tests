@@ -1,0 +1,145 @@
+{
+  "cookies": [
+    {
+      "name": "li_sugr",
+      "value": "c254208c-0471-4e7c-8013-38cf82e59aac",
+      "domain": ".linkedin.com",
+      "path": "/",
+      "expires": 1799349412.562104,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "bcookie",
+      "value": "\"v=2&1955d3dc-7b87-4903-857b-42f570d8bfe5\"",
+      "domain": ".linkedin.com",
+      "path": "/",
+      "expires": 1823109412.562131,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "lidc",
+      "value": "\"b=VGST06:s=V:r=V:a=V:p=V:g=3599:u=1:x=1:i=1791573405:t=1791659805:v=2:sig=AQGOQYpe6IZ2-Hq84ezRBzO5keWZMBlQ\"",
+      "domain": ".linkedin.com",
+      "path": "/",
+      "expires": 1791659805.243276,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "UserMatchHistory",
+      "value": "AQLgT2E4_JFMKgAAAaEiGK7QjIoUewe5VC5G8UYonoyy7BVPgFlLssP0Mu-EcT8QuYcMbF4A4EplyQ",
+      "domain": ".linkedin.com",
+      "path": "/",
+      "expires": 1794165405.502501,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "AnalyticsSyncHistory",
+      "value": "AQJnkOpJwbUtbgAAAaEiGK7QmQH8L5_NSQKQF4ri4fT-OKeSwWtwj7oW2ntv4CWNgbTsLwyr9-xKky2QcIFRqw",
+      "domain": ".linkedin.com",
+      "path": "/",
+      "expires": 1794165405.502529,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "bscookie",
+      "value": "\"v=1&20261009191645e35edabb-9cd4-4c21-8546-1c1903e0a509AQEl2H_By8wEi6yfgznZcrKu174MPIkr\"",
+      "domain": ".www.linkedin.com",
+      "path": "/",
+      "expires": 1823109405.787393,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "_gid",
+      "value": "GA1.2.816110896.1791573411",
+      "domain": ".instahyre.com",
+      "path": "/",
+      "expires": 1791659811,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_gat_UA-45611607-3",
+      "value": "1",
+      "domain": ".instahyre.com",
+      "path": "/",
+      "expires": 1791573471,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "csrftoken",
+      "value": "bK5Nt23kZ77ZMijJgQHURQ1PloyYQtXV3Yb4OgZ0OBqkeAYtVgJ7zyU8gIP6j3ob",
+      "domain": "www.instahyre.com",
+      "path": "/",
+      "expires": 1823023012.569405,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "sessionid",
+      "value": "zkeq8bl6m3pblslmimwcc3na96wbmrwx",
+      "domain": "www.instahyre.com",
+      "path": "/",
+      "expires": 1796757411.458155,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_ga_0PQL61K7YN",
+      "value": "GS2.1.s1791573405$o1$g1$t1791573411$j54$l0$h0",
+      "domain": ".instahyre.com",
+      "path": "/",
+      "expires": 1826133411.934054,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "_ga",
+      "value": "GA1.1.1747069337.1791573405",
+      "domain": ".instahyre.com",
+      "path": "/",
+      "expires": 1826133411.934177,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "__cf_bm",
+      "value": "98Cz5ieIeIaSXk2YdA7IfX169hWWBzYoYpIY80j63P4-1791573412.5834892-1.0.1.1-Xz8TDppT_AAbof6sO6ncYvau0XpUMuhOWinrNaSmZyPapx2Jx0pNFHApu92kXqnlGiK6KpSyVhrvB9Gbh9sHtXKIlDqxS197aW_M2nTLt7Wh1y7tLiN9Ll7B1hcbed4l",
+      "domain": ".linkedin.com",
+      "path": "/",
+      "expires": 1791575212.809998,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    }
+  ],
+  "origins": [
+    {
+      "origin": "https://www.instahyre.com",
+      "localStorage": [
+        {
+          "name": "li_adsId",
+          "value": "f7a30571-36a6-4135-87e6-37298093c718"
+        }
+      ]
+    }
+  ]
+}

@@ -63,6 +63,8 @@ jobs:
         run: npx playwright test
         env:
           TEST_ENV: ${{ github.event.inputs.environment || 'prod' }}
+          TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
 
       # Parse Playwright JSON report metrics
       - name: Parse Test Metrics

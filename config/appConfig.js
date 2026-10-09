@@ -5,7 +5,7 @@ import { environmentConfig as qaConfig } from './environments/qa.js';
 import { environmentConfig as stagingConfig } from './environments/staging.js';
 import { environmentConfig as prodConfig } from './environments/prod.js';
 
-const env = process.env.TEST_ENV || 'qa';
+const env = process.env.TEST_ENV || 'prod';
 
 const environments = {
   qa: qaConfig,

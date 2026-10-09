@@ -1,13 +1,13 @@
 // @ts-check
 import { test, expect } from '@playwright/test';
-import { setTimeout } from 'timers/promises';
-import path from 'node:path';
+import config from './../config/config.js';
 const fs = require('node:fs'); 
 
 test('has title', async ({ page }) => {
   const fileDownloadPromise = page.waitForEvent('download');
   const expected_text = 'This is my sample file.';
-  await page.goto('https://testing.qaautomationlabs.com/file-download.php');
+  const downloadEndpoint = config.get('endpoints.download')
+  await page.goto(downloadEndpoint);
   await page.getByTestId('download-text-input').fill(expected_text)
   await page.getByTestId('download-generate-btn').click();
    await page.getByTestId('download-link').click();

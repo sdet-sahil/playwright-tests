@@ -6,6 +6,17 @@ on:
   pull_request:
     branches: [ main, master ]
   workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Select the environment to run tests against'
+        required: true
+        default: 'prod'
+        type: choice
+        options:
+          - qa
+          - staging
+          - prod
+
 
 jobs:
   test:
@@ -46,6 +57,8 @@ jobs:
     # 4. Run tests
     - name: Run Playwright tests
       run: npx playwright test
+      env: 
+        TEST_ENV: ${{ github.event.inputs.environment || 'prod' }}
 
     # 5. ALWAYS SAVE THE HTML REPORT TO GITHUB ARTIFACTS (Runs even if tests fail)
     - name: Upload Playwright HTML Report
@@ -70,7 +83,7 @@ jobs:
         SLACK_COLOR: '#00FF00'
         SLACK_ICON: 'https://playwright.dev'
         SLACK_TITLE: '✅ Playwright Test Successful!'
-        SLACK_MESSAGE: 'All automated end-to-end tests passed cleanly against the browser engines!\nView Run: https://github.com{{ github.repository }}/actions/runs/${{ github.run_id }}'
+        SLACK_MESSAGE: 'All automated end-to-end tests passed cleanly against the browser engines in [${{ github.event.inputs.environment || "prod" }}]!\nView Run: https://github.com${{ github.repository }}/actions/runs/${{ github.run_id }}'
         SLACK_USERNAME: 'Playwright Bot'
 
     # 🔴 Slack Failure Alert (Includes link to find the HTML report artifact)
@@ -84,5 +97,5 @@ jobs:
         SLACK_ICON: 'https://playwright.dev'
         SLACK_TITLE: '🚨 Playwright Test Failed!'
         # 🔗 The line below dynamically links directly to the specific execution run where the downloadable artifact is stored
-        SLACK_MESSAGE: 'The Playwright test suite broke. Please check the logs and download the HTML Report artifact here:\n👉 https://github.com{{ github.repository }}/actions/runs/${{ github.run_id }}'
+        SLACK_MESSAGE:  'The Playwright test suite broke in [${{ github.event.inputs.environment || "prod" }}]. Please check the logs and download the HTML Report artifact here:\n👉 https://github.com${{ github.repository }}/actions/runs/${{ github.run_id }}'
         SLACK_USERNAME: 'Playwright Bot'

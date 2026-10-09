@@ -1,11 +1,13 @@
 // @ts-check
 import { test, expect } from '@playwright/test';
 import { setTimeout } from 'timers/promises';
+import config from './../config/config.js';
 import path from 'node:path';
 
 test('has title', async ({ page }) => {
   const fileChooserPromise = page.waitForEvent('filechooser');
-  await page.goto('https://qaautomationlabs.com/testing/file-upload.php');
+  const uploadEndpoint = config.get('endpoints.upload')
+  await page.goto(uploadEndpoint);
   await page.getByTestId('upload-browse-btn').click();
   const fileChooser = await fileChooserPromise;
    await setTimeout(10000);

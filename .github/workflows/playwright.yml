@@ -65,7 +65,7 @@ jobs:
       if: success() && (github.actor == 'dependabot[bot]' || github.event_name == 'workflow_dispatch')
       uses: rtCamp/action-slack-notify@v2
       env:
-        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+        SLACK_WEBHOOK: ${{ secrets.PLAYWRIGHT_CHANNEL_URL }}
         SLACK_CHANNEL: 'testing-alerts'
         SLACK_COLOR: '#00FF00'
         SLACK_ICON: 'https://playwright.dev'
@@ -78,7 +78,7 @@ jobs:
       if: failure() && (github.actor == 'dependabot[bot]' || github.event_name == 'workflow_dispatch')
       uses: rtCamp/action-slack-notify@v2
       env:
-        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+        SLACK_WEBHOOK: ${{ secrets.PLAYWRIGHT_CHANNEL_URL }}
         SLACK_CHANNEL: 'testing-alerts'
         SLACK_COLOR: '#FF0000'
         SLACK_ICON: 'https://playwright.dev'

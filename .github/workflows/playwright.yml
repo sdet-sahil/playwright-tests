@@ -1,8 +1,6 @@
 # .github/workflows/playwright.yml
 name: Playwright Tests
 on:
-  push:
-    branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
   workflow_dispatch:
@@ -101,7 +99,7 @@ jobs:
 
     # 🟢 Slack Success Alert
     - name: Send Slack Notification on Success
-      if: steps.run-tests.outcome == 'success' && (github.actor == 'dependabot[bot]' || github.event_name == 'workflow_dispatch')
+      if: steps.run-tests.outcome == 'success' && (github.actor == 'dependabot[bot]' || github.event_name == 'workflow_dispatch' ||  github.event_name == 'pull_request')
       uses: rtCamp/action-slack-notify@v2
       env:
         SLACK_WEBHOOK: \${{ secrets.PLAYWRIGHT_CHANNEL_URL }}
@@ -116,12 +114,12 @@ jobs:
           ✅ Passed: `${{ steps.parse-metrics.outputs.PASSED }}`
           ❌ Failed: `${{ steps.parse-metrics.outputs.FAILED }}`
           ⚠️ Flaky: `${{ steps.parse-metrics.outputs.FLAKY }}`
-        SLACK_FOOTER: 'View Pipeline Summary: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+        SLACK_FOOTER: 'View Pipeline Summary: \${{ github.server_url }}/ github.repository /actions/runs/{{ github.run_id }}'
         SLACK_USERNAME: 'Playwright Bot'
 
     # 🔴 Slack Failure Alert
     - name: Send Slack Notification on Failure
-      if: steps.run-tests.outcome == 'failure' && (github.actor == 'dependabot[bot]' || github.event_name == 'workflow_dispatch')
+      if: steps.run-tests.outcome == 'failure' && (github.actor == 'dependabot[bot]' || github.event_name == 'workflow_dispatch' ||  github.event_name == 'pull_request')
       uses: rtCamp/action-slack-notify@v2
       env:
         SLACK_WEBHOOK: \${{ secrets.PLAYWRIGHT_CHANNEL_URL }}
@@ -138,7 +136,7 @@ jobs:
           ⚠️ Flaky: `${{ steps.parse-metrics.outputs.FLAKY }}`
           
           Please check the failure logs and download the HTML Report artifact immediately.
-        SLACK_FOOTER: 'Download Report Artifact Here: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+        SLACK_FOOTER: 'Download Report Artifact Here: \${{ github.server_url }}/ github.repository /actions/runs/{{ github.run_id }}'
         SLACK_USERNAME: 'Playwright Bot'
 
     # 7. Explicit clean-up: Fail the GitHub step if the test runner step failed

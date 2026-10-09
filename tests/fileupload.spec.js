@@ -9,7 +9,7 @@ test('has title', async ({ page }) => {
   await page.getByTestId('upload-browse-btn').click();
   const fileChooser = await fileChooserPromise;
    await setTimeout(10000);
-  await fileChooser.setFiles(path.join(__dirname, '../../../Downloads/Lead_Tech_QTE_SDET_JD.pdf'));
+  await fileChooser.setFiles(path.join(__dirname, '../files/Lead_Tech_QTE_SDET_JD.pdf'));
   const fileInfo = page.getByTestId('upload-file-info');
   await expect(fileInfo).toHaveText('Selected File: Lead_Tech_QTE_SDET_JD.pdf & File Size is 141.52 KB');
   await setTimeout(10000);

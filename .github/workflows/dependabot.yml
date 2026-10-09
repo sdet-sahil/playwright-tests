@@ -4,11 +4,12 @@ updates:
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
-      interval: "weekly"
+      interval: "weekly" # Checks for new Playwright releases every week
       day: "monday"
       time: "09:00"
       timezone: "America/New_York"
     open-requests-limit: 3
+    # Optional: Group updates so your CI doesn't run separate jobs for Playwright and its sub-packages
     groups:
       playwright-dependencies:
         patterns:

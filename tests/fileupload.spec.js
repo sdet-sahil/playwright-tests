@@ -4,7 +4,7 @@ import { setTimeout } from 'timers/promises';
 import config from './../config/config.js';
 import path from 'node:path';
 
-test('has title', async ({ page }) => {
+test('user is able to upload file', async ({ page }) => {
   const fileChooserPromise = page.waitForEvent('filechooser');
   const uploadEndpoint = config.get('endpoints.upload')
   await page.goto(uploadEndpoint);

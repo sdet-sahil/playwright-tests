@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 import config from './../config/config.js';
 const fs = require('node:fs'); 
 
-test('has title', async ({ page }) => {
+test('user is able to download file', async ({ page }) => {
   const fileDownloadPromise = page.waitForEvent('download');
   const expected_text = 'This is my sample file.';
   const downloadEndpoint = config.get('endpoints.download')

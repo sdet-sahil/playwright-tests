@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig, devices } from '@playwright/test';
 import config from './config/config.js';
+import 'dotenv/config';
 
 export default defineConfig({
   testDir: './tests',
